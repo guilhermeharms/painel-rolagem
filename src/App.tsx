@@ -1,8 +1,25 @@
 // Protótipo do sistema de sugestão de rolagens - Versão inicial em React (estrutura visual)
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
+
+type Formulario = {
+  assessor: string;
+  cliente: string;
+  tipoOperacao: string;
+  strikeAtual: string;
+  vencimentoAtual: string;
+  premioAtual: string;
+  quantidade: string;
+  preferencia: string;
+};
+
+type Resultado = {
+  strikeNovo: number;
+  premioNovo: number;
+  net: number;
+};
 
 export default function PainelRolagem() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Formulario>({
     assessor: '',
     cliente: '',
     tipoOperacao: '',
@@ -13,9 +30,9 @@ export default function PainelRolagem() {
     preferencia: '',
   });
 
-  const [resultado, setResultado] = useState(null);
+  const [resultado, setResultado] = useState<Resultado | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -24,11 +41,7 @@ export default function PainelRolagem() {
     const premioNovo = parseFloat(form.premioAtual) - 0.2;
     const net = parseFloat(form.premioAtual) - premioNovo;
 
-    setResultado({
-      strikeNovo,
-      premioNovo,
-      net,
-    });
+    setResultado({ strikeNovo, premioNovo, net });
   };
 
   return (
@@ -51,9 +64,9 @@ export default function PainelRolagem() {
       {resultado && (
         <div style={{ marginTop: '20px', border: '1px solid #ccc', padding: '15px' }}>
           <h2>Sugestão de Rolagem</h2>
-          <p><strong>Novo Strike:</strong> {resultado.strikeNovo?.toFixed(2)}</p>
-<p><strong>Prêmio Estimado:</strong> R$ {resultado.premioNovo?.toFixed(2)}</p>
-<p><strong>Net da Rolagem:</strong> R$ {resultado.net?.toFixed(2)}</p>
+          <p><strong>Novo Strike:</strong> {resultado.strikeNovo.toFixed(2)}</p>
+          <p><strong>Prêmio Estimado:</strong> R$ {resultado.premioNovo.toFixed(2)}</p>
+          <p><strong>Net da Rolagem:</strong> R$ {resultado.net.toFixed(2)}</p>
         </div>
       )}
     </div>
